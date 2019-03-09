@@ -43,6 +43,26 @@
             rangeslider: {range: ['2017-01-03 12:00', '2017-02-15 12:00']}, 
             title: 'Date', 
             type: 'date', 
+            rangeselector: {
+        x: 0,
+        y: 1.2,
+        xanchor: 'left',
+        font: {size:8},
+        buttons: [{
+            step: 'month',
+            stepmode: 'backward',
+            count: 1,
+            label: '1 month'
+        }, {
+            step: 'month',
+            stepmode: 'backward',
+            count: 6,
+            label: '6 months'
+        }, {
+            step: 'all',
+            label: 'All dates'
+        }]
+      }
         }, 
         yaxis: {
             autorange: true, 
@@ -64,6 +84,8 @@
         }
 
         Plotly.plot('plotly-div', data, layout, {showSendToCloud: true});
+        var cnt = 0;
+        
         setInterval(function(){
             Plotly.extendTraces('plotly-div', {x:[[date()]]}, [0]);
             Plotly.extendTraces('plotly-div', {open:[[price()]]}, [0]);
@@ -73,10 +95,7 @@
             Plotly.extendTraces('plotly-div', {close:[[date()]]}, [0]);
 
             var convD = new Date(oneDay);
-            console.log(convD);
-
             oneDay += 86400000;
-
 
             cnt++;
 

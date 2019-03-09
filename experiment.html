@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="datas.js"></script>
+</head>
+<body>
+<!-- Plotly chart will be drawn inside this div -->
+<div id="plotly-div"></div>
+    <script>
+    // JAVASCRIPT CODE GOES HERE
+        function date(){
+            var now = Date.now();
+            return now;
+        }
+        function price(){
+            return  Math.floor((Math.random() * 100) + 1);
+        }
+                
+        var data = [{
+                    x: [date()],
+                    open: [price()],
+                    high: [price()],
+                    low: [price()],
+                    close: [price()],
+                    increasing: { line: {color: 'green', width: 1, }}, 
+                    decreasing: { line: {color: 'red', width: 1, }}, 
+                    type: 'candlestick', 
+                    xaxis: 'x', 
+                    yaxis: 'y',
+                }];
+
+        var layout = {
+            title: 'Pato candle-stick chart',
+            // dragmode: 'zoom', 
+            margin: { r: 500, t: 50, b: 50, l: 500 }, 
+            xaxis: {
+                domain: [0, 1], 
+                range: [date(), date()  + 29000], // this show the first 29 candleStick after this will fire the set Interval down there
+                // rangeslider: {range: ['min date', 'max date']}, 
+                title: 'Date            current price ( ... )', 
+                type: 'date', 
+            }, 
+            yaxis: {
+                    title: 'Price',
+                    autorange: true, 
+                    domain: [0, 1], 
+                    // range: [114.609999778, 137.410004222], 
+                    type: 'linear',
+                    annotations: [
+                        {
+                        xref: 'paper',
+                        yref: 'paper',
+                        x: 0.0,
+                        y: 1.05,
+                        xanchor: 'left',
+                        yanchor: 'bottom',
+                        text: 'Main Source for News',
+                        font:{
+                            family: 'Arial',
+                            size: 30,
+                            color: 'rgb(37,37,37)'
+                        },
+                        showarrow: false
+                        },
+                    ]
+                },
+        };
+        
+        var minusOne = 29000;
+        Plotly.plot('plotly-div', data, layout, {showSendToCloud: true}); // render the chart
+        setInterval(function(){
+            Plotly.extendTraces('plotly-div', {x:[[date()]]}, [0]); // add one data to a date
+            Plotly.extendTraces('plotly-div', {open:[[price()]]}, [0]); // add one data to a open
+            Plotly.extendTraces('plotly-div', {high:[[price()]]}, [0]); // add one data to a high
+            Plotly.extendTraces('plotly-div', {low:[[price()]]}, [0]); // add one data to a low
+            Plotly.extendTraces('plotly-div', {close:[[price()]]}, [0]); // add one data to a close
+            
+            
+            // console.log(minusOne);
+
+            
+            if (data[0].x.length > 30) {
+                Plotly.relayout('plotly-div', {
+                    xaxis:{
+                        range: [date() - 30000 ,date()],
+                        domain: [0, 1], 
+                    title:  'Date            current price ( $'+price()+' )',  
+                    type: 'date', 
+                    rangeselector: {
+                    x: 0,
+                    y: 1.2,
+                    xanchor: 'left',
+                    font: {size:8},
+                    buttons: [{
+                            step: 'second',
+                            stepmode: 'backward',
+                            count: 1,
+                            label: '1 minute'
+                        }, {
+                            step: 'minute',
+                            stepmode: 'backward',
+                            count: 2,
+                            label: '2 minute'
+                        }, {
+                            step: 'all',
+                            label: 'All dates'
+                    }]
+                } // can select a specific data on a chart ex( sept 2, 2019 oct 5, 2019 data)
+                    },
+                    yaxis: {
+                        title: 'Price',
+                        autorange: true, 
+                        domain: [0, 1], 
+                        range: [114.609999778, 137.410004222], 
+                        type: 'linear'
+                    }
+                })
+            } // the the date count is greater than 30 relayout the chart 
+            minusOne -= 1000;
+        }, 1000) // add data to traces every 1 seconds
+    </script>
+</body>
+</html>
