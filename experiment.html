@@ -31,14 +31,30 @@
 
         var layout = {
             title: 'Pato candle-stick chart',
+            shapes: [
+                        {
+                            type: 'line',
+                            xref: 'paper',
+                            x0: 0,
+                            y0: 50,
+                            x1: 1,
+                            y1: 50,
+                            line:{
+                                color: 'rgb(255, 0, 0)',
+                                width: 2,
+                                dash:'dot'
+                            }
+                        }
+                    ], //create horizontal line
             // dragmode: 'zoom', 
-            margin: { r: 500, t: 50, b: 50, l: 500 }, 
+            margin: { r: 200, t: 50, b: 50, l: 200 }, 
             xaxis: {
                 domain: [0, 1], 
                 range: [date(), date()  + 29000], // this show the first 29 candleStick after this will fire the set Interval down there
                 // rangeslider: {range: ['min date', 'max date']}, 
                 title: 'Date            current price ( ... )', 
-                type: 'date', 
+                type: 'date',
+              
             }, 
             yaxis: {
                     title: 'Price',
