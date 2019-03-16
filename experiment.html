@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="datas.js"></script>
 </head>
 <body>
@@ -12,6 +13,8 @@
             var now = Date.now();
             return now;
         }
+
+
         function price(){
             return  Math.floor((Math.random() * 100) + 1);
         }
@@ -40,10 +43,21 @@
                             x1: 1,
                             y1: 50,
                             line:{
-                                color: 'rgb(255, 0, 0)',
-                                width: 2,
-                                dash:'dot'
+                                color: 'blue',
+                                width: 1,
                             }
+                        },
+                        {
+                            type: 'line',
+                            yref: 'paper',
+                            x0: Date.now() + 15000,
+                            y0: 0,
+                            x1:  Date.now() + 15000 ,
+                            y1: 1,
+                            line:{
+                                    color: 'blue',
+                                    width: 1,
+                                }
                         }
                     ], //create horizontal line
             // dragmode: 'zoom', 
@@ -54,8 +68,8 @@
                 // rangeslider: {range: ['min date', 'max date']}, 
                 title: 'Date            current price ( ... )', 
                 type: 'date',
-              
             }, 
+            line: {color: 'blue', width: 5},
             yaxis: {
                     title: 'Price',
                     autorange: true, 
@@ -72,11 +86,10 @@
                         yanchor: 'bottom',
                         text: 'Main Source for News',
                         font:{
-                            family: 'Arial',
-                            size: 30,
-                            color: 'rgb(37,37,37)'
-                        },
-                        showarrow: false
+                                family: 'Arial',
+                                size: 30,
+                                color: 'rgb(37,37,37)'
+                            },
                         },
                     ]
                 },
@@ -91,49 +104,79 @@
             Plotly.extendTraces('plotly-div', {low:[[price()]]}, [0]); // add one data to a low
             Plotly.extendTraces('plotly-div', {close:[[price()]]}, [0]); // add one data to a close
             
-            
-            // console.log(minusOne);
-
-            
-            if (data[0].x.length > 30) {
+            if (data[0].x.length > 0) {
                 Plotly.relayout('plotly-div', {
                     xaxis:{
+                        transition:{duration: 1000},
                         range: [date() - 30000 ,date()],
                         domain: [0, 1], 
-                    title:  'Date            current price ( $'+price()+' )',  
-                    type: 'date', 
-                    rangeselector: {
-                    x: 0,
-                    y: 1.2,
-                    xanchor: 'left',
-                    font: {size:8},
-                    buttons: [{
-                            step: 'second',
-                            stepmode: 'backward',
-                            count: 1,
-                            label: '1 minute'
-                        }, {
-                            step: 'minute',
-                            stepmode: 'backward',
-                            count: 2,
-                            label: '2 minute'
-                        }, {
-                            step: 'all',
-                            label: 'All dates'
-                    }]
-                } // can select a specific data on a chart ex( sept 2, 2019 oct 5, 2019 data)
+                        title:  'Date            current price ( $'+price()+' )',  
+                        type: 'date', 
+                        rangeselector: {
+                            x: 0,
+                            y: 1.2,
+                            xanchor: 'left',
+                            font: {size:8},
+                            buttons: [{
+                                    step: 'second',
+                                    stepmode: 'backward',
+                                    count: 1,
+                                    label: '1 minute'
+                                }, {
+                                    step: 'minute',
+                                    stepmode: 'backward',
+                                    count: 2,
+                                    label: '2 minute'
+                                }, {
+                                    step: 'all',
+                                    label: 'All dates'
+                        }],
+                    } // can select a specific data on a chart ex( sept 2, 2019 oct 5, 2019 data)
                     },
                     yaxis: {
                         title: 'Price',
                         autorange: true, 
                         domain: [0, 1], 
                         range: [114.609999778, 137.410004222], 
-                        type: 'linear'
-                    }
+                        type: 'linear',
+                        hovertext: 'PUTANGINA'
+                    },
+                    shapes: [
+                            {
+                                type: 'line',
+                                xref: 'paper',
+                                x0: 0,
+                                y0: 80,
+                                x1: 1,
+                                y1: 80,
+                                line:{
+                                    color: 'blue',
+                                    width: 1,
+                                    dash: 'dot'
+                                }
+                            },// HORIZONTAL LINE
+                            {
+                                type: 'spline',
+                                yref: 'paper',
+                                x0: Date.now() - 2000,
+                                y0: 0,
+                                x1: Date.now() - 2000,
+                                y1: 1,
+                                line:{
+                                        color: 'blue',
+                                        width: 1,
+                                        dash: 'dot'
+                                    }
+                            }// VERTICAL LINE
+                        ],
                 })
             } // the the date count is greater than 30 relayout the chart 
             minusOne -= 1000;
         }, 1000) // add data to traces every 1 seconds
+
+     
     </script>
+
+
 </body>
 </html>
